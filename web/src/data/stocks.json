@@ -1,0 +1,234 @@
+{
+  "stocks": [
+    {
+      "code": "000988",
+      "name": "华工科技",
+      "marketCap": 380,
+      "industry": "CPO/激光器",
+      "chainId": "cpo-silicon-photonics",
+      "nodeId": "laser-chip",
+      "scores": {
+        "physicalNecessity": 4,
+        "oligopoly": 3,
+        "capacityRigidity": 4,
+        "smallCap": 3
+      },
+      "scoreReasons": {
+        "physicalNecessity": "光通信核心器件，800G/1.6T光模块升级绕不开激光器环节",
+        "oligopoly": "国内激光器竞争格局尚可，但全球份额仍低，CR3约60%",
+        "capacityRigidity": "激光器产线扩产周期12-18个月，芯片自研需更长时间",
+        "smallCap": "380亿市值，机构覆盖中等，部分定价"
+      },
+      "totalScore": 14,
+      "summary": "CPO激光器核心标的，产能刚性明确，但全球份额偏低",
+      "tags": ["CPO", "激光器", "主力持仓"]
+    },
+    {
+      "code": "002463",
+      "name": "沪电股份",
+      "marketCap": 520,
+      "industry": "PCB/高速背板",
+      "chainId": "cpo-silicon-photonics",
+      "nodeId": "optical-module",
+      "scores": {
+        "physicalNecessity": 5,
+        "oligopoly": 4,
+        "capacityRigidity": 3,
+        "smallCap": 2
+      },
+      "scoreReasons": {
+        "physicalNecessity": "高速PCB是AI服务器和交换机刚需，无替代方案",
+        "oligopoly": "高端高速PCB全球CR3约70%，沪电是国内龙头",
+        "capacityRigidity": "PCB扩产相对快（6-12个月），但高端产线有技术壁垒",
+        "smallCap": "520亿市值偏大，机构覆盖充分，定价较充分"
+      },
+      "totalScore": 14,
+      "summary": "PCB瓶颈标的，物理必需性极强，但市值偏大定价较充分",
+      "tags": ["PCB", "高速背板", "主力持仓"]
+    },
+    {
+      "code": "600584",
+      "name": "长电科技",
+      "marketCap": 680,
+      "industry": "先进封装",
+      "chainId": "advanced-packaging",
+      "nodeId": "cowos",
+      "scores": {
+        "physicalNecessity": 5,
+        "oligopoly": 3,
+        "capacityRigidity": 5,
+        "smallCap": 1
+      },
+      "scoreReasons": {
+        "physicalNecessity": "先进封装是AI芯片性能突破的物理瓶颈，绕不开",
+        "oligopoly": "全球封装CR3约50%，长电是全球第三，但CoWoS仍被台积电垄断",
+        "capacityRigidity": "先进封装产线扩产周期18-24个月，设备采购周期长",
+        "smallCap": "680亿市值，机构高度覆盖，定价充分"
+      },
+      "totalScore": 14,
+      "summary": "封装瓶颈标的，产能刚性极强，但市值偏大预期差较小",
+      "tags": ["封装", "CoWoS", "主力持仓"]
+    },
+    {
+      "code": "300623",
+      "name": "捷捷微电",
+      "marketCap": 180,
+      "industry": "功率半导体",
+      "chainId": "ai-power",
+      "nodeId": "transformer",
+      "scores": {
+        "physicalNecessity": 4,
+        "oligopoly": 2,
+        "capacityRigidity": 3,
+        "smallCap": 4
+      },
+      "scoreReasons": {
+        "physicalNecessity": "功率器件是电力基础设施刚需，但非最核心瓶颈环节",
+        "oligopoly": "功率半导体竞争格局分散，国内厂商众多",
+        "capacityRigidity": "8寸产线扩产周期12个月左右，中规中矩",
+        "smallCap": "180亿市值，机构覆盖度低，存在定价不充分"
+      },
+      "totalScore": 13,
+      "summary": "小市值功率半导体，机构覆盖度低，但瓶颈属性偏弱",
+      "tags": ["功率半导体", "AI电力", "主力持仓"]
+    },
+    {
+      "code": "688498",
+      "name": "源杰科技",
+      "marketCap": 120,
+      "industry": "CW激光器芯片",
+      "chainId": "cpo-silicon-photonics",
+      "nodeId": "laser-chip",
+      "scores": {
+        "physicalNecessity": 5,
+        "oligopoly": 4,
+        "capacityRigidity": 5,
+        "smallCap": 5
+      },
+      "scoreReasons": {
+        "physicalNecessity": "CW激光器是CPO架构核心光源，无替代方案",
+        "oligopoly": "全球大功率CW国产化率<15%，SIVE/Lumentum垄断，源杰是国内最接近的",
+        "capacityRigidity": "InP基激光器芯片产线扩产周期18-24个月，MBE/MOCVD设备采购受限",
+        "smallCap": "120亿市值，机构覆盖极低，定价极不充分"
+      },
+      "totalScore": 19,
+      "summary": "最强瓶颈标的：物理必需+寡头垄断+产能刚性+极小市值，四维全满",
+      "tags": ["CW激光器", "CPO", "核心关注"]
+    },
+    {
+      "code": "002428",
+      "name": "云南锗业",
+      "marketCap": 95,
+      "industry": "InP衬底/高纯铟镓",
+      "chainId": "cpo-silicon-photonics",
+      "nodeId": "inp-substrate",
+      "scores": {
+        "physicalNecessity": 5,
+        "oligopoly": 4,
+        "capacityRigidity": 5,
+        "smallCap": 5
+      },
+      "scoreReasons": {
+        "physicalNecessity": "InP衬底是光通信芯片的基础材料，无可替代",
+        "oligopoly": "全球InP衬底CR3>90%，日本AXTI/住友垄断，云南锗业是国内唯一量产",
+        "capacityRigidity": "InP单晶生长周期长，扩产需2-3年，且受出口管制影响设备采购",
+        "smallCap": "95亿市值，几乎无机构覆盖，定价极不充分"
+      },
+      "totalScore": 19,
+      "summary": "最强瓶颈标的：InP衬底国产唯一+出口管制逻辑+极小市值，认知差最大",
+      "tags": ["InP衬底", "铟镓砷", "出口管制", "核心关注"]
+    },
+    {
+      "code": "300308",
+      "name": "中际旭创",
+      "marketCap": 2800,
+      "industry": "光模块",
+      "chainId": "cpo-silicon-photonics",
+      "nodeId": "optical-module",
+      "scores": {
+        "physicalNecessity": 4,
+        "oligopoly": 4,
+        "capacityRigidity": 2,
+        "smallCap": 1
+      },
+      "scoreReasons": {
+        "physicalNecessity": "光模块是AI算力网络核心，但非最上游瓶颈",
+        "oligopoly": "全球光模块CR3约60%，中际旭创全球第一",
+        "capacityRigidity": "光模块组装扩产快（6个月），非产能瓶颈",
+        "smallCap": "2800亿市值，机构极度覆盖，定价非常充分"
+      },
+      "totalScore": 11,
+      "summary": "光模块龙头但非瓶颈标的：定价充分，产能弹性大，瓶颈属性弱",
+      "tags": ["光模块", "定价充分"]
+    },
+    {
+      "code": "002156",
+      "name": "通富微电",
+      "marketCap": 350,
+      "industry": "先进封装",
+      "chainId": "advanced-packaging",
+      "nodeId": "cowos",
+      "scores": {
+        "physicalNecessity": 5,
+        "oligopoly": 3,
+        "capacityRigidity": 4,
+        "smallCap": 3
+      },
+      "scoreReasons": {
+        "physicalNecessity": "先进封装是AI芯片性能瓶颈，绕不开",
+        "oligopoly": "国内封装第二，但先进封装份额远低于台积电",
+        "capacityRigidity": "先进封装产线扩产18-24个月",
+        "smallCap": "350亿市值，机构覆盖中等"
+      },
+      "totalScore": 15,
+      "summary": "先进封装核心标的，产能刚性明确，但先进封装份额待提升",
+      "tags": ["封装", "AMD代工"]
+    },
+    {
+      "code": "600089",
+      "name": "特变电工",
+      "marketCap": 580,
+      "industry": "变压器/输配电",
+      "chainId": "ai-power",
+      "nodeId": "transformer",
+      "scores": {
+        "physicalNecessity": 5,
+        "oligopoly": 3,
+        "capacityRigidity": 5,
+        "smallCap": 2
+      },
+      "scoreReasons": {
+        "physicalNecessity": "变压器是数据中心供电刚需，无可替代",
+        "oligopoly": "国内变压器竞争格局尚可，特变是龙头之一",
+        "capacityRigidity": "大型变压器交期18-24个月，扩产周期极长",
+        "smallCap": "580亿市值偏大，机构覆盖充分"
+      },
+      "totalScore": 15,
+      "summary": "AI电力瓶颈标的，产能刚性极强，但市值偏大定价较充分",
+      "tags": ["变压器", "AI电力"]
+    },
+    {
+      "code": "002837",
+      "name": "英维克",
+      "marketCap": 210,
+      "industry": "液冷",
+      "chainId": "ai-power",
+      "nodeId": "liquid-cooling",
+      "scores": {
+        "physicalNecessity": 4,
+        "oligopoly": 2,
+        "capacityRigidity": 3,
+        "smallCap": 4
+      },
+      "scoreReasons": {
+        "physicalNecessity": "液冷是高功率AI芯片散热刚需，渗透率快速提升",
+        "oligopoly": "液冷竞争格局未定，玩家众多",
+        "capacityRigidity": "液冷产线扩产周期6-12个月，不算刚性",
+        "smallCap": "210亿市值，机构覆盖度中等"
+      },
+      "totalScore": 13,
+      "summary": "液冷赛道小市值标的，需求确定但格局未定、产能弹性大",
+      "tags": ["液冷", "散热"]
+    }
+  ]
+}

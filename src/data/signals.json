@@ -1,0 +1,136 @@
+{
+  "signals": [
+    {
+      "id": "sig-001",
+      "stockCode": "000988",
+      "stockName": "华工科技",
+      "date": "2026-06-03",
+      "type": "capacity",
+      "level": "positive",
+      "title": "光模块产能利用率超90%",
+      "detail": "公司披露800G光模块产线满产，1.6T产品进入客户验证阶段，预计Q3量产",
+      "source": "公司公告"
+    },
+    {
+      "id": "sig-002",
+      "stockCode": "000988",
+      "stockName": "华工科技",
+      "date": "2026-05-28",
+      "type": "capital",
+      "level": "positive",
+      "title": "北向资金连续5日净流入",
+      "detail": "5个交易日累计净流入2.3亿元，持股比例从3.2%升至3.8%",
+      "source": "北向资金数据"
+    },
+    {
+      "id": "sig-003",
+      "stockCode": "688498",
+      "stockName": "源杰科技",
+      "date": "2026-06-01",
+      "type": "certification",
+      "level": "positive",
+      "title": "CW激光器通过大客户验证",
+      "detail": "公司50mW CW激光器芯片通过北美头部云厂商验证，预计下半年批量出货",
+      "source": "投资者关系活动记录"
+    },
+    {
+      "id": "sig-004",
+      "stockCode": "688498",
+      "stockName": "源杰科技",
+      "date": "2026-05-20",
+      "type": "geopolitics",
+      "level": "positive",
+      "title": "美国扩大对华半导体设备出口管制",
+      "detail": "新增MBE/MOCVD设备出口限制，加速CW激光器芯片国产替代进程",
+      "source": "商务部公告"
+    },
+    {
+      "id": "sig-005",
+      "stockCode": "002428",
+      "stockName": "云南锗业",
+      "date": "2026-05-25",
+      "type": "certification",
+      "level": "positive",
+      "title": "InP衬底获国内光芯片厂认证",
+      "detail": "2英寸InP衬底通过国内主要光芯片厂商认证，3英寸产品在研",
+      "source": "公司公告"
+    },
+    {
+      "id": "sig-006",
+      "stockCode": "002428",
+      "stockName": "云南锗业",
+      "date": "2026-06-02",
+      "type": "geopolitics",
+      "level": "positive",
+      "title": "铟出口管制预期升温",
+      "detail": "市场预期中国可能对铟等关键金属实施出口管制，云南锗业是国内最大铟生产商",
+      "source": "行业分析"
+    },
+    {
+      "id": "sig-007",
+      "stockCode": "600584",
+      "stockName": "长电科技",
+      "date": "2026-06-04",
+      "type": "capacity",
+      "level": "positive",
+      "title": "通富微电涨停，先进封装产能紧张",
+      "detail": "受台积电CoWoS产能持续紧张消息刺激，国内先进封装概念全线走强",
+      "source": "市场动态"
+    },
+    {
+      "id": "sig-008",
+      "stockCode": "300308",
+      "stockName": "中际旭创",
+      "date": "2026-06-04",
+      "type": "earnings",
+      "level": "positive",
+      "title": "市值超茅台，光模块龙头验证",
+      "detail": "中际旭创市值突破2800亿，超越贵州茅台成为市场焦点，但瓶颈属性偏弱",
+      "source": "市场动态"
+    },
+    {
+      "id": "sig-009",
+      "stockCode": "002463",
+      "stockName": "沪电股份",
+      "date": "2026-05-30",
+      "type": "capital",
+      "level": "neutral",
+      "title": "主力资金小幅流出",
+      "detail": "连续3日主力资金小幅净流出，但北向资金持仓稳定",
+      "source": "资金流向数据"
+    },
+    {
+      "id": "sig-010",
+      "stockCode": "300623",
+      "stockName": "捷捷微电",
+      "date": "2026-06-03",
+      "type": "earnings",
+      "level": "negative",
+      "title": "亏损3.49%",
+      "detail": "持仓浮亏3.49%，距止损线-8%还有7.7%空间，逻辑暂未变化",
+      "source": "持仓数据"
+    },
+    {
+      "id": "sig-011",
+      "stockCode": "600089",
+      "stockName": "特变电工",
+      "date": "2026-05-22",
+      "type": "capacity",
+      "level": "positive",
+      "title": "变压器交期延长至20个月",
+      "detail": "大型电力变压器全球交期从16个月延长至20个月，产能紧张加剧",
+      "source": "行业研报"
+    },
+    {
+      "id": "sig-012",
+      "stockCode": "002156",
+      "stockName": "通富微电",
+      "date": "2026-06-04",
+      "type": "capacity",
+      "level": "positive",
+      "title": "先进封装产线满产",
+      "detail": "公司AMD相关封装产线满产运行，新产线预计Q4投产",
+      "source": "公司公告"
+    }
+  ]
+}

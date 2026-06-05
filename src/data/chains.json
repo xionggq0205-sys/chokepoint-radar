@@ -1,0 +1,169 @@
+{
+  "chains": [
+    {
+      "id": "cpo-silicon-photonics",
+      "name": "CPO/硅光产业链",
+      "description": "AI算力扩张→光互连升级，核心瓶颈在激光器和衬底材料",
+      "nodes": [
+        {
+          "id": "gpu-asic",
+          "name": "GPU/ASIC",
+          "level": 1,
+          "chokeLevel": "low",
+          "description": "已充分定价，NVIDIA/AMD格局清晰",
+          "cr3": "NVIDIA 80%+",
+          "stocks": ["688256"]
+        },
+        {
+          "id": "hbm-storage",
+          "name": "HBM/存储",
+          "level": 2,
+          "chokeLevel": "medium",
+          "description": "第二层瓶颈，SK海力士领先，部分定价",
+          "cr3": "SK海力士/三星/美光 >90%",
+          "stocks": []
+        },
+        {
+          "id": "advanced-packaging",
+          "name": "先进封装/CoWoS",
+          "level": 3,
+          "chokeLevel": "high",
+          "description": "台积电垄断，产能持续紧张",
+          "cr3": "台积电 >90%",
+          "stocks": ["600584", "002156"]
+        },
+        {
+          "id": "optical-module",
+          "name": "光模块 800G/1.6T",
+          "level": 4,
+          "chokeLevel": "medium",
+          "description": "定价中，国内厂商份额提升",
+          "cr3": "中际旭创/Coherent/新易盛",
+          "stocks": ["300308", "300502", "002281"]
+        },
+        {
+          "id": "laser-chip",
+          "name": "激光器 EML/DFB/CW",
+          "level": 5,
+          "chokeLevel": "high",
+          "description": "定价早期，国产化率极低，核心瓶颈",
+          "cr3": "SIVE/Lumentum/II-VI >85%",
+          "stocks": ["688498", "002049"]
+        },
+        {
+          "id": "inp-substrate",
+          "name": "InP衬底",
+          "level": 6,
+          "chokeLevel": "high",
+          "description": "认知差最大，出口管制+国产替代逻辑",
+          "cr3": "AXTI/住友/JX金属 >90%",
+          "stocks": ["002428"]
+        },
+        {
+          "id": "raw-material",
+          "name": "高纯原材料 铟/镓/砷",
+          "level": 7,
+          "chokeLevel": "high",
+          "description": "几乎无人关注，最大预期差",
+          "cr3": "中国占全球70%+产量",
+          "stocks": ["002428", "000960"]
+        },
+        {
+          "id": "mbe-mocvd",
+          "name": "MBE/MOCVD设备",
+          "level": 8,
+          "chokeLevel": "high",
+          "description": "设备端瓶颈，Veeco/德国AIXTRON垄断",
+          "cr3": "Veeco/AIXTRON >80%",
+          "stocks": []
+        }
+      ]
+    },
+    {
+      "id": "advanced-packaging",
+      "name": "先进封装产业链",
+      "description": "AI芯片性能瓶颈从制程转向封装，CoWoS产能持续紧缺",
+      "nodes": [
+        {
+          "id": "cowos",
+          "name": "CoWoS产能",
+          "level": 1,
+          "chokeLevel": "high",
+          "description": "台积电垄断，扩产周期18-24个月",
+          "cr3": "台积电 >95%",
+          "stocks": ["600584", "002156"]
+        },
+        {
+          "id": "abf-substrate",
+          "name": "ABF载板",
+          "level": 2,
+          "chokeLevel": "high",
+          "description": "日本味之素垄断ABF材料，载板扩产慢",
+          "cr3": "味之素/欣兴电子/IBIDEN",
+          "stocks": ["002436", "002916"]
+        },
+        {
+          "id": "hbm-packaging",
+          "name": "HBM封装",
+          "level": 3,
+          "chokeLevel": "high",
+          "description": "SK海力士领先，TSV技术壁垒高",
+          "cr3": "SK海力士/三星/美光",
+          "stocks": ["002156", "600667"]
+        },
+        {
+          "id": "flip-chip",
+          "name": "倒装焊/微凸点",
+          "level": 4,
+          "chokeLevel": "medium",
+          "description": "封装工艺核心，精度要求持续提升",
+          "cr3": "日月光/安靠/长电科技",
+          "stocks": ["600584"]
+        }
+      ]
+    },
+    {
+      "id": "ai-power",
+      "name": "AI电力基础设施",
+      "description": "AI数据中心用电量激增，电力基础设施成为新瓶颈",
+      "nodes": [
+        {
+          "id": "transformer",
+          "name": "变压器",
+          "level": 1,
+          "chokeLevel": "high",
+          "description": "交期18-24个月，全球产能紧张",
+          "cr3": "ABB/西门子/施耐德",
+          "stocks": ["600089", "000400"]
+        },
+        {
+          "id": "liquid-cooling",
+          "name": "液冷",
+          "level": 2,
+          "chokeLevel": "medium",
+          "description": "渗透率快速提升，但格局未定",
+          "cr3": "Vertiv/英维克/高澜股份",
+          "stocks": ["002837", "300499"]
+        },
+        {
+          "id": "ups",
+          "name": "UPS不间断电源",
+          "level": 3,
+          "chokeLevel": "medium",
+          "description": "数据中心刚需，格局相对稳定",
+          "cr3": "施耐德/伊顿/维谛",
+          "stocks": ["002335"]
+        },
+        {
+          "id": "power-cable",
+          "name": "特种电缆",
+          "level": 4,
+          "chokeLevel": "low",
+          "description": "需求增长但供应充足",
+          "cr3": "远东/亨通/中利",
+          "stocks": []
+        }
+      ]
+    }
+  ]
+}

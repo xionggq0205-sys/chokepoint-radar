@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chokepoint Radar | A股瓶颈投资信号仪表盘</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg-primary: #0a0a0f;
+    --bg-secondary: #12121a;
+    --bg-card: #1a1a2e;
+    --border: #2a2a3e;
+    --text-primary: #e8e8f0;
+    --text-secondary: #8888a0;
+    --accent: #ff6b2b;
+    --accent-light: #ff8f5e;
+    --accent-dim: rgba(255, 107, 43, 0.15);
+    --green: #22c55e;
+    --red: #ef4444;
+    --yellow: #eab308;
+  }
+  body { background: var(--bg-primary); color: var(--text-primary); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+  ::-webkit-scrollbar { width: 6px; } ::-webkit-scrollbar-track { background: var(--bg-primary); } ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+  /* Header */
+  .header { border-bottom: 1px solid var(--border); background: var(--bg-secondary); }
+  .header-inner { max-width: 1280px; margin: 0 auto; padding: 16px 20px; display: flex; align-items: center; justify-content: space-between; }
+  .logo { display: flex; align-items: center; gap: 12px; }
+  .logo-icon { width: 32px; height: 32px; border-radius: 8px; background: var(--accent); display: flex; align-items: center; justify-content: center; }
+  .logo-icon svg { width: 20px; height: 20px; fill: white; }
+  .logo h1 { font-size: 18px; font-weight: 700; letter-spacing: -0.5px; }
+  .logo p { font-size: 12px; color: var(--text-secondary); }
+  .header-right { display: flex; align-items: center; gap: 16px; }
+  .status-badge { display: flex; align-items: center; gap: 8px; padding: 6px 12px; border-radius: 6px; background: var(--bg-card); border: 1px solid var(--border); font-size: 12px; }
+  .status-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); animation: pulse 2s infinite; }
+  @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+
+  /* Main */
+  .main { max-width: 1280px; margin: 0 auto; padding: 24px 20px; }
+  .section { margin-bottom: 32px; }
+  .section-title { font-size: 12px; font-weight: 500; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; }
+
+  /* Chain tabs */
+  .chain-tabs { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; }
+  .chain-tab { padding: 8px 16px; border-radius: 8px; font-size: 14px; font-weight: 500; cursor: pointer; transition: all 0.2s; border: 1px solid var(--border); background: var(--bg-card); color: var(--text-secondary); }
+  .chain-tab:hover { color: var(--text-primary); }
+  .chain-tab.active { background: var(--accent); color: white; border-color: var(--accent); }
+
+  /* Chain flow */
+  .chain-flow { background: var(--bg-card); border-radius: 12px; border: 1px solid var(--border); padding: 20px; }
+  .chain-desc { font-size: 12px; color: var(--text-secondary); margin-bottom: 16px; }
+  .chain-nodes { display: flex; align-items: center; gap: 8px; overflow-x: auto; padding-bottom: 8px; }
+  .chain-node { padding: 8px 12px; border-radius: 8px; border: 1px solid var(--border); font-size: 12px; font-weight: 500; min-width: 100px; text-align: center; flex-shrink: 0; background: var(--bg-secondary); color: var(--text-secondary); }
+  .chain-node.high { border-color: var(--accent); background: var(--accent-dim); color: var(--accent-light); }
+  .chain-node-name { font-weight: 700; font-size: 14px; margin-bottom: 4px; }
+  .chain-node-level { display: flex; align-items: center; justify-content: center; gap: 4px; }
+  .choke-dot { width: 6px; height: 6px; border-radius: 50%; }
+  .choke-dot.high { background: var(--accent); }
+  .choke-dot.medium { background: var(--yellow); }
+  .choke-dot.low { background: var(--text-secondary); }
+  .arrow { color: var(--text-secondary); flex-shrink: 0; font-size: 16px; }
+
+  /* Radar grid */
+  .radar-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; flex-wrap: wrap; gap: 8px; }
+  .radar-legend { display: flex; align-items: center; gap: 16px; font-size: 12px; color: var(--text-secondary); }
+  .legend-item { display: flex; align-items: center; gap: 4px; }
+  .legend-dot { width: 8px; height: 8px; border-radius: 50%; }
+  .stock-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 16px; }
+  .stock-card { background: var(--bg-card); border-radius: 12px; border: 1px solid var(--border); padding: 16px; transition: border-color 0.2s; }
+  .stock-card:hover { border-color: var(--accent); }
+  .stock-header { display: flex; align-items: start; justify-content: space-between; margin-bottom: 12px; }
+  .stock-name { font-size: 16px; font-weight: 700; }
+  .stock-code { font-size: 12px; color: var(--text-secondary); margin-left: 8px; }
+  .stock-info { font-size: 12px; color: var(--text-secondary); margin-top: 2px; }
+  .stock-score { font-size: 28px; font-weight: 900; font-variant-numeric: tabular-nums; }
+  .score-high { color: var(--accent); }
+  .score-mid { color: var(--yellow); }
+  .score-low { color: var(--text-secondary); }
+  .dimensions { margin-bottom: 12px; }
+  .dim-row { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+  .dim-label { font-size: 12px; color: var(--text-secondary); width: 64px; flex-shrink: 0; }
+  .dim-bars { display: flex; gap: 2px; }
+  .dim-bar { width: 12px; height: 6px; border-radius: 2px; }
+  .dim-bar.filled { background: var(--accent); }
+  .dim-bar.empty { background: var(--border); }
+  .dim-value { font-size: 12px; font-family: monospace; width: 16px; text-align: right; }
+  .stock-summary { font-size: 12px; color: var(--text-secondary); line-height: 1.6; margin-bottom: 12px; }
+  .stock-tags { display: flex; flex-wrap: wrap; gap: 4px; }
+  .tag { padding: 2px 8px; border-radius: 4px; font-size: 10px; font-weight: 500; }
+  .tag-core { background: var(--accent-dim); color: var(--accent-light); }
+  .tag-hold { background: rgba(34,197,94,0.15); color: var(--green); }
+  .tag-default { background: var(--bg-secondary); color: var(--text-secondary); }
+
+  /* Signal feed */
+  .signal-list { background: var(--bg-card); border-radius: 12px; border: 1px solid var(--border); }
+  .signal-item { padding: 16px; display: flex; align-items: start; gap: 12px; border-bottom: 1px solid var(--border); }
+  .signal-item:last-child { border-bottom: none; }
+  .signal-item:hover { background: var(--bg-secondary); }
+  .signal-icon { width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .signal-icon.positive { background: rgba(34,197,94,0.1); color: var(--green); }
+  .signal-icon.negative { background: rgba(239,68,68,0.1); color: var(--red); }
+  .signal-icon.neutral { background: var(--bg-secondary); color: var(--text-secondary); }
+  .signal-content { flex: 1; min-width: 0; }
+  .signal-meta { display: flex; align-items: center; gap: 8px; margin-bottom: 4px; }
+  .signal-stock { font-size: 12px; font-weight: 500; color: var(--accent); }
+  .signal-type { font-size: 12px; padding: 2px 6px; border-radius: 4px; background: var(--bg-secondary); color: var(--text-secondary); }
+  .signal-level { font-size: 12px; padding: 2px 6px; border-radius: 4px; font-weight: 500; }
+  .signal-level.positive { background: rgba(34,197,94,0.1); color: var(--green); }
+  .signal-level.negative { background: rgba(239,68,68,0.1); color: var(--red); }
+  .signal-level.neutral { background: var(--bg-secondary); color: var(--text-secondary); }
+  .signal-title { font-size: 14px; font-weight: 500; margin-bottom: 4px; }
+  .signal-detail { font-size: 12px; color: var(--text-secondary); line-height: 1.6; }
+  .signal-date { font-size: 12px; color: var(--text-secondary); flex-shrink: 0; white-space: nowrap; }
+
+  /* Footer */
+  .footer { border-top: 1px solid var(--border); margin-top: 48px; padding: 24px; text-align: center; font-size: 12px; color: var(--text-secondary); }
+</style>
+</head>
+<body>
+
+<!-- Header -->
+<header class="header">
+  <div class="header-inner">
+    <div class="logo">
+      <div class="logo-icon">
+        <svg viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+      </div>
+      <div>
+        <h1>Chokepoint Radar</h1>
+        <p>A股瓶颈投资信号仪表盘</p>
+      </div>
+    </div>
+    <div class="header-right">
+      <div class="status-badge">
+        <span class="status-dot"></span>
+        <span style="color:var(--text-secondary)">数据更新</span>
+        <span style="color:var(--text-primary)">2026-06-05</span>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main class="main">
+
+  <!-- Chain Map -->
+  <section class="section">
+    <div class="section-title">产业链 Chokepoint Map</div>
+    <div class="chain-tabs">
+      <div class="chain-tab active">CPO/硅光产业链</div>
+      <div class="chain-tab">先进封装产业链</div>
+      <div class="chain-tab">AI电力基础设施</div>
+    </div>
+    <div class="chain-flow">
+      <div class="chain-desc">AI算力扩张→光互连升级，核心瓶颈在激光器和衬底材料</div>
+      <div class="chain-nodes">
+        <div class="chain-node low"><div class="chain-node-name">GPU/ASIC</div><div class="chain-node-level"><span class="choke-dot low"></span> 瓶颈低</div></div>
+        <span class="arrow">→</span>
+        <div class="chain-node medium"><div class="chain-node-name">HBM/存储</div><div class="chain-node-level"><span class="choke-dot medium"></span> 瓶颈中</div></div>
+        <span class="arrow">→</span>
+        <div class="chain-node high"><div class="chain-node-name">先进封装/CoWoS</div><div class="chain-node-level"><span class="choke-dot high"></span> 瓶颈高</div></div>
+        <span class="arrow">→</span>
+        <div class="chain-node medium"><div class="chain-node-name">光模块 800G</div><div class="chain-node-level"><span class="choke-dot medium"></span> 瓶颈中</div></div>
+        <span class="arrow">→</span>
+        <div class="chain-node high"><div class="chain-node-name">激光器 EML/DFB</div><div class="chain-node-level"><span class="choke-dot high"></span> 瓶颈高</div></div>
+        <span class="arrow">→</span>
+        <div class="chain-node high"><div class="chain-node-name">InP衬底</div><div class="chain-node-level"><span class="choke-dot high"></span> 瓶颈高</div></div>
+        <span class="arrow">→</span>
+        <div class="chain-node high"><div class="chain-node-name">高纯铟/镓/砷</div><div class="chain-node-level"><span class="choke-dot high"></span> 瓶颈高</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Radar Grid -->
+  <section class="section">
+    <div class="radar-header">
+      <div class="section-title" style="margin-bottom:0">瓶颈评分雷达 Chokepoint Radar</div>
+      <div class="radar-legend">
+        <span class="legend-item"><span class="legend-dot" style="background:var(--accent)"></span> 高瓶颈 (15+)</span>
+        <span class="legend-item"><span class="legend-dot" style="background:var(--yellow)"></span> 中瓶颈 (12-14)</span>
+        <span class="legend-item"><span class="legend-dot" style="background:var(--text-secondary)"></span> 低瓶颈 (&lt;12)</span>
+      </div>
+    </div>
+    <div class="stock-grid">
+
+      <!-- 源杰科技 19 -->
+      <div class="stock-card">
+        <div class="stock-header">
+          <div><span class="stock-name">源杰科技</span><span class="stock-code">688498</span><div class="stock-info">CW激光器芯片 · 120亿</div></div>
+          <div class="stock-score score-high">19</div>
+        </div>
+        <div class="dimensions">
+          <div class="dim-row"><span class="dim-label">物理必需</span><div class="dim-bars"><span class="dim-bar filled"></span><span class="dim-bar filled"></span><span class="dim-bar filled"></span><span class="dim-bar filled"></span><span class="dim-bar filled"></span></div><span class="dim-value">5</span></div>
+          <div class="dim-row"><span class="dim-label">寡头垄断</span><div class="dim-bars"><span class="dim-bar filled"></span><span class="dim-bar filled"></span><span class="dim-bar filled"></span><span class="dim-bar filled"></span><span class="dim-bar empty"></span></div><span class="dim-value">4</span></div>
+          <div class="dim-row"><span class="dim-label">产能刚性</span><div class="dim-bars"><span class="dim-bar filled"></span><span class="dim-bar filled"></span><span class="dim-bar filled"></span><span class="dim-bar filled"></span><span class="dim-bar filled"></span></div><span class="dim-value">5</span></div>
+          <div class="dim-row"><span class="dim-label">小市值</span><div class="dim-bars"><span class="dim-bar filled"></span><span class="dim-bar filled"></span><span class="dim-bar filled"></span><span class="dim-bar filled"></span><span class="dim-bar filled"></span></div><span class="dim-value">5</span></div>
+        </div>
+        <div class="stock-summary">最强瓶颈标的：物理必需+寡头垄断+产能刚性+极小市值，四维全满</div>
+        <div class="stock-tags"><span class="tag tag-core">核心关注</span><span class="tag tag-default">CW激光器</span><span class="tag tag-default">CPO</span></div>
+      </div>
+
+      <!-- 云南锗业 19 -->
+      <div class="stock-card">
+        <div class="stock-header">
+          <div><span class="stock-name">云南锗业</span><span class="stock-code">002428</span><div class="stock-info">InP衬底/高纯铟镓 · 95亿</div></div>
+          <div class="stock-score score-high">19</div>
+        </div>
+        <div class="dimensions">
+          <div class="dim-row"><span class="dim-label">物理必需</span><div class="dim-bars"><span class="dim-bar filled"></span><span class="dim-bar filled"></span><span class="dim-bar filled"></span><span class="dim-bar filled"></span><span class="dim-bar filled"></span></div><span class="dim-value">5</span></div>
+          <div class="dim-row"><span class="dim-label">寡头垄断</span><div class="dim-bars"><span class="dim-bar filled"></span><span class="dim-bar filled"></span><span class="dim-bar filled"></span><span class="dim-bar filled"></span><span class="dim-bar empty"></span></div><span class="dim-value">4</span></div>
+          <div class="dim-row"><span class="dim-label">产能刚性</span><div class="dim-bars"><span class="dim-bar filled"></span><span class="dim-bar filled"></span><span class="dim-bar filled"></span><span class="dim-bar filled"></span><span class="dim-bar filled"></span></div><span class="dim-value">5</span></div>
+          <div class="dim-row"><span class="dim-label">小市值</span><div class="dim-bars"><span class="dim-bar filled"></span><span class="dim-bar filled"></span><span class="dim-bar filled"></span><span class="dim-bar filled"></span><span class="dim-bar filled"></span></div><span class="dim-value">5</span></div>
+        </div>
+        <div class="stock-summary">最强瓶颈标的：InP衬底国产唯一+出口管制逻辑+极小市值，认知差最大</div>
+        <div class="stock-tags"><span class="tag tag-core">核心关注</span><span class="tag tag-default">InP衬底</span><span class="tag tag-default">出口管制</span></div>
+      </div>
+
+      <!-- 通富微电 15 -->
+      <div class="stock-card">
+        <div class="stock-header">
+          <div><span class="stock-name">通富微电</span><span class="stock-code">002156</span><div class="stock-info">先进封装 · 350亿</div></div>
+          <div class="stock-score score-high">15</div>
+        </div>
+        <div class="dimensions">
+          <div class="dim-row"><span class="dim-label">物理必需</span><div class="dim-bars"><span class="dim-bar filled"></span><span class="dim-bar filled"></span><span class="dim-bar filled"></span><span class="dim-bar filled"></span><span class="dim-bar filled"></span></div><span class="dim-value">5</span></div>
+          <div class="dim-row"><span class="dim-label">寡头垄断</span><div class="dim-bars"><span class="dim-bar filled"></span><span class="dim-bar filled"></span><span class="dim-bar filled"></span><span class="dim-bar empty"></span><span class="dim-bar empty"></span></div><span class="dim-value">3</span></div>
+          <div class="dim-row"><span class="dim-label">产能刚性</span><div class="dim-bars"><span class="dim-bar filled"></span><span class="dim-bar filled"></span><span class="dim-bar filled"></span><span class="dim-bar filled"></span><span class="dim-bar empty"></span></div><span class="dim-value">4</span></div>
+          <div class="dim-row"><span class="dim-label">小市值</span><div class="dim-bars"><span class="dim-bar filled"></span><span class="dim-bar filled"></span><span class="dim-bar filled"></span><span class="dim-bar empty"></span><span class="dim-bar empty"></span></div><span class="dim-value">3</span></div>
+        </div>
+        <div class="stock-summary">先进封装核心标的，产能刚性明确，但先进封装份额待提升</div>
+        <div class="stock-tags"><span class="tag tag-default">封装</span><span class="tag tag-default">AMD代工</span></div>
+      </div>
+
+      <!-- 特变电工 15 -->
+      <div class="stock-card">
+        <div class="stock-header">
+          <div><span class="stock-name">特变电工</span><span class="stock-code">600089</span><div class="stock-info">变压器/输配电 · 580亿</div></div>
+          <div class="stock-score score-high">15</div>
+        </div>
+        <div class="dimensions">
+          <div class="dim-row"><span class="dim-label">物理必需</span><div class="dim-bars"><span class="dim-bar filled"></span><span class="dim-bar filled"></span><span class="dim-bar filled"></span><span class="dim-bar filled"></span><span class="dim-bar filled"></span></div><span class="dim-value">5</span></div>
+          <div class="dim-row"><span class="dim-label">寡头垄断</span><div class="dim-bars"><span class="dim-bar filled"></span><span class="dim-bar filled"></span><span class="dim-bar filled"></span><span class="dim-bar empty"></span><span class="dim-bar empty"></span></div><span class="dim-value">3</span></div>
+          <div class="dim-row"><span class="dim-label">产能刚性</span><div class="dim-bars"><span class="dim-bar filled"></span><span class="dim-bar filled"></span><span class="dim-bar filled"></span><span class="dim-bar filled"></span><span class="dim-bar filled"></span></div><span class="dim-value">5</span></div>
+          <div class="dim-row"><span class="dim-label">小市值</span><div class="dim-bars"><span class="dim-bar filled"></span><span class="dim-bar filled"></span><span class="dim-bar empty"></span><span class="dim-bar empty"></span><span class="dim-bar empty"></span></div><span class="dim-value">2</span></div>
+        </div>
+        <div class="stock-summary">AI电力瓶颈标的，产能刚性极强，但市值偏大定价较充分</div>
+        <div class="stock-tags"><span class="tag tag-default">变压器</span><span class="tag tag-default">AI电力</span></div>
+      </div>
+
+      <!-- 华工科技 14 -->
+      <div class="stock-card">
+        <div class="stock-header">
+          <div><span class="stock-name">华工科技</span><span class="stock-code">000988</span><div class="stock-info">CPO/激光器 · 380亿</div></div>
+          <div class="stock-score score-mid">14</div>
+        </div>
+        <div class="dimensions">
+          <div class="dim-row"><span class="dim-label">物理必需</span><div class="dim-bars"><span class="dim-bar filled"></span><span class="dim-bar filled"></span><span class="dim-bar filled"></span><span class="dim-bar filled"></span><span class="dim-bar empty"></span></div><span class="dim-value">4</span></div>
+          <div class="dim-row"><span class="dim-label">寡头垄断</span><div class="dim-bars"><span class="dim-bar filled"></span><span class="dim-bar filled"></span><span class="dim-bar filled"></span><span class="dim-bar empty"></span><span class="dim-bar empty"></span></div><span class="dim-value">3</span></div>
+          <div class="dim-row"><span class="dim-label">产能刚性</span><div class="dim-bars"><span class="dim-bar filled"></span><span class="dim-bar filled"></span><span class="dim-bar filled"></span><span class="dim-bar filled"></span><span class="dim-bar empty"></span></div><span class="dim-value">4</span></div>
+          <div class="dim-row"><span class="dim-label">小市值</span><div class="dim-bars"><span class="dim-bar filled"></span><span class="dim-bar filled"></span><span class="dim-bar filled"></span><span class="dim-bar empty"></span><span class="dim-bar empty"></span></div><span class="dim-value">3</span></div>
+        </div>
+        <div class="stock-summary">CPO激光器核心标的，产能刚性明确，但全球份额偏低</div>
+        <div class="stock-tags"><span class="tag tag-hold">主力持仓</span><span class="tag tag-default">CPO</span><span class="tag tag-default">激光器</span></div>
+      </div>
+
+      <!-- 沪电股份 14 -->
+      <div class="stock-card">
+        <div class="stock-header">
+          <div><span class="stock-name">沪电股份</span><span class="stock-code">002463</span><div class="stock-info">PCB/高速背板 · 520亿</div></div>
+          <div class="stock-score score-mid">14</div>
+        </div>
+        <div class="dimensions">
+          <div class="dim-row"><span class="dim-label">物理必需</span><div class="dim-bars"><span class="dim-bar filled"></span><span class="dim-bar filled"></span><span class="dim-bar filled"></span><span class="dim-bar filled"></span><span class="dim-bar filled"></span></div><span class="dim-value">5</span></div>
+          <div class="dim-row"><span class="dim-label">寡头垄断</span><div class="dim-bars"><span class="dim-bar filled"></span><span class="dim-bar filled"></span><span class="dim-bar filled"></span><span class="dim-bar filled"></span><span class="dim-bar empty"></span></div><span class="dim-value">4</span></div>
+          <div class="dim-row"><span class="dim-label">产能刚性</span><div class="dim-bars"><span class="dim-bar filled"></span><span class="dim-bar filled"></span><span class="dim-bar filled"></span><span class="dim-bar empty"></span><span class="dim-bar empty"></span></div><span class="dim-value">3</span></div>
+          <div class="dim-row"><span class="dim-label">小市值</span><div class="dim-bars"><span class="dim-bar filled"></span><span class="dim-bar filled"></span><span class="dim-bar empty"></span><span class="dim-bar empty"></span><span class="dim-bar empty"></span></div><span class="dim-value">2</span></div>
+        </div>
+        <div class="stock-summary">PCB瓶颈标的，物理必需性极强，但市值偏大定价较充分</div>
+        <div class="stock-tags"><span class="tag tag-hold">主力持仓</span><span class="tag tag-default">PCB</span><span class="tag tag-default">高速背板</span></div>
+      </div>
+
+      <!-- 长电科技 14 -->
+      <div class="stock-card">
+        <div class="stock-header">
+          <div><span class="stock-name">长电科技</span><span class="stock-code">600584</span><div class="stock-info">先进封装 · 680亿</div></div>
+          <div class="stock-score score-mid">14</div>
+        </div>
+        <div class="dimensions">
+          <div class="dim-row"><span class="dim-label">物理必需</span><div class="dim-bars"><span class="dim-bar filled"></span><span class="dim-bar filled"></span><span class="dim-bar filled"></span><span class="dim-bar filled"></span><span class="dim-bar filled"></span></div><span class="dim-value">5</span></div>
+          <div class="dim-row"><span class="dim-label">寡头垄断</span><div class="dim-bars"><span class="dim-bar filled"></span><span class="dim-bar filled"></span><span class="dim-bar filled"></span><span class="dim-bar empty"></span><span class="dim-bar empty"></span></div><span class="dim-value">3</span></div>
+          <div class="dim-row"><span class="dim-label">产能刚性</span><div class="dim-bars"><span class="dim-bar filled"></span><span class="dim-bar filled"></span><span class="dim-bar filled"></span><span class="dim-bar filled"></span><span class="dim-bar filled"></span></div><span class="dim-value">5</span></div>
+          <div class="dim-row"><span class="dim-label">小市值</span><div class="dim-bars"><span class="dim-bar filled"></span><span class="dim-bar empty"></span><span class="dim-bar empty"></span><span class="dim-bar empty"></span><span class="dim-bar empty"></span></div><span class="dim-value">1</span></div>
+        </div>
+        <div class="stock-summary">封装瓶颈标的，产能刚性极强，但市值偏大预期差较小</div>
+        <div class="stock-tags"><span class="tag tag-hold">主力持仓</span><span class="tag tag-default">封装</span><span class="tag tag-default">CoWoS</span></div>
+      </div>
+
+      <!-- 中际旭创 11 -->
+      <div class="stock-card">
+        <div class="stock-header">
+          <div><span class="stock-name">中际旭创</span><span class="stock-code">300308</span><div class="stock-info">光模块 · 2800亿</div></div>
+          <div class="stock-score score-low">11</div>
+        </div>
+        <div class="dimensions">
+          <div class="dim-row"><span class="dim-label">物理必需</span><div class="dim-bars"><span class="dim-bar filled"></span><span class="dim-bar filled"></span><span class="dim-bar filled"></span><span class="dim-bar filled"></span><span class="dim-bar empty"></span></div><span class="dim-value">4</span></div>
+          <div class="dim-row"><span class="dim-label">寡头垄断</span><div class="dim-bars"><span class="dim-bar filled"></span><span class="dim-bar filled"></span><span class="dim-bar filled"></span><span class="dim-bar filled"></span><span class="dim-bar empty"></span></div><span class="dim-value">4</span></div>
+          <div class="dim-row"><span class="dim-label">产能刚性</span><div class="dim-bars"><span class="dim-bar filled"></span><span class="dim-bar filled"></span><span class="dim-bar empty"></span><span class="dim-bar empty"></span><span class="dim-bar empty"></span></div><span class="dim-value">2</span></div>
+          <div class="dim-row"><span class="dim-label">小市值</span><div class="dim-bars"><span class="dim-bar filled"></span><span class="dim-bar empty"></span><span class="dim-bar empty"></span><span class="dim-bar empty"></span><span class="dim-bar empty"></span></div><span class="dim-value">1</span></div>
+        </div>
+        <div class="stock-summary">光模块龙头但非瓶颈标的：定价充分，产能弹性大，瓶颈属性弱</div>
+        <div class="stock-tags"><span class="tag tag-default">光模块</span><span class="tag tag-default">定价充分</span></div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Signal Feed -->
+  <section class="section">
+    <div class="section-title">最新信号 Signal Feed</div>
+    <div class="signal-list">
+      <div class="signal-item">
+        <div class="signal-icon positive">▲</div>
+        <div class="signal-content">
+          <div class="signal-meta"><span class="signal-stock">688498 源杰科技</span><span class="signal-type">认证</span><span class="signal-level positive">利多</span></div>
+          <div class="signal-title">CW激光器通过大客户验证</div>
+          <div class="signal-detail">公司50mW CW激光器芯片通过北美头部云厂商验证，预计下半年批量出货</div>
+        </div>
+        <div class="signal-date">06-01</div>
+      </div>
+      <div class="signal-item">
+        <div class="signal-icon positive">▲</div>
+        <div class="signal-content">
+          <div class="signal-meta"><span class="signal-stock">002428 云南锗业</span><span class="signal-type">地缘</span><span class="signal-level positive">利多</span></div>
+          <div class="signal-title">铟出口管制预期升温</div>
+          <div class="signal-detail">市场预期中国可能对铟等关键金属实施出口管制，云南锗业是国内最大铟生产商</div>
+        </div>
+        <div class="signal-date">06-02</div>
+      </div>
+      <div class="signal-item">
+        <div class="signal-icon positive">▲</div>
+        <div class="signal-content">
+          <div class="signal-meta"><span class="signal-stock">600584 长电科技</span><span class="signal-type">产能</span><span class="signal-level positive">利多</span></div>
+          <div class="signal-title">通富微电涨停，先进封装产能紧张</div>
+          <div class="signal-detail">受台积电CoWoS产能持续紧张消息刺激，国内先进封装概念全线走强</div>
+        </div>
+        <div class="signal-date">06-04</div>
+      </div>
+      <div class="signal-item">
+        <div class="signal-icon positive">▲</div>
+        <div class="signal-content">
+          <div class="signal-meta"><span class="signal-stock">688498 源杰科技</span><span class="signal-type">地缘</span><span class="signal-level positive">利多</span></div>
+          <div class="signal-title">美国扩大对华半导体设备出口管制</div>
+          <div class="signal-detail">新增MBE/MOCVD设备出口限制，加速CW激光器芯片国产替代进程</div>
+        </div>
+        <div class="signal-date">05-20</div>
+      </div>
+      <div class="signal-item">
+        <div class="signal-icon negative">▼</div>
+        <div class="signal-content">
+          <div class="signal-meta"><span class="signal-stock">300623 捷捷微电</span><span class="signal-type">业绩</span><span class="signal-level negative">利空</span></div>
+          <div class="signal-title">捷捷微电亏损3.49%</div>
+          <div class="signal-detail">持仓浮亏3.49%，距止损线-8%还有7.7%空间，逻辑暂未变化</div>
+        </div>
+        <div class="signal-date">06-03</div>
+      </div>
+      <div class="signal-item">
+        <div class="signal-icon neutral">—</div>
+        <div class="signal-content">
+          <div class="signal-meta"><span class="signal-stock">002463 沪电股份</span><span class="signal-type">资金</span><span class="signal-level neutral">中性</span></div>
+          <div class="signal-title">沪电股份主力资金小幅流出</div>
+          <div class="signal-detail">连续3日主力资金小幅净流出，但北向资金持仓稳定</div>
+        </div>
+        <div class="signal-date">05-30</div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="footer">
+  <p>Chokepoint Radar v0.1.0 · 基于 Serenity 瓶颈投资法</p>
+  <p style="margin-top:4px">数据仅供参考，不构成投资建议</p>
+</footer>
+
+</body>
+</html>
