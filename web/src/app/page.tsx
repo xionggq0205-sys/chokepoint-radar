@@ -6,6 +6,62 @@ import chainsData from "@/data/chains.json";
 import stocksData from "@/data/stocks.json";
 import signalsData from "@/data/signals.json";
 
+type ChokeLevel = "low" | "medium" | "high";
+
+interface ChainNode {
+  id: string;
+  name: string;
+  level: number;
+  chokeLevel: ChokeLevel;
+  description: string;
+  cr3: string;
+  stocks: string[];
+}
+
+interface Chain {
+  id: string;
+  name: string;
+  description: string;
+  nodes: ChainNode[];
+}
+
+interface StockScores {
+  physicalNecessity: number;
+  oligopoly: number;
+  capacityRigidity: number;
+  smallCap: number;
+}
+
+interface Stock {
+  code: string;
+  name: string;
+  marketCap: number;
+  industry: string;
+  chainId: string;
+  nodeId: string;
+  scores: StockScores;
+  scoreReasons: Record<string, string>;
+  totalScore: number;
+  summary: string;
+  tags: string[];
+}
+
+interface Signal {
+  id: string;
+  stockCode: string;
+  stockName: string;
+  date: string;
+  type: string;
+  level: "positive" | "negative" | "neutral";
+  title: string;
+  detail: string;
+  source: string;
+}
+
+const chains = chainsData.chains as Chain[];
+const stocks = stocksData.stocks as Stock[];
+const signals = signalsData.signals as Signal[];
+
 export default function Home() {
   return (
     <div className="min-h-screen">
@@ -15,7 +71,7 @@ export default function Home() {
           <h2 className="text-sm font-medium text-[var(--text-secondary)] mb-3 tracking-wide uppercase">
             产业链 Chokepoint Map
           </h2>
-          <ChainSelector chains={chainsData.chains} />
+          <ChainSelector chains={chains} />
         </section>
 
         <section>
@@ -38,14 +94,14 @@ export default function Home() {
               </span>
             </div>
           </div>
-          <StockRadarGrid stocks={stocksData.stocks} />
+          <StockRadarGrid stocks={stocks} />
         </section>
 
         <section>
           <h2 className="text-sm font-medium text-[var(--text-secondary)] mb-3 tracking-wide uppercase">
             最新信号 Signal Feed
           </h2>
-          <SignalFeed signals={signalsData.signals} />
+          <SignalFeed signals={signals} />
         </section>
       </main>
 
